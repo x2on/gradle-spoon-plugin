@@ -1,0 +1,19 @@
+// Example build file
+
+buildscript {
+	repositories {
+   	 mavenLocal()
+   	 mavenCentral()
+	}
+	dependencies {
+		classpath group: 'de.felixschulze.gradle', name: 'gradle-spoon-plugin', version: '1.0-SNAPSHOT'
+	}
+}
+
+apply plugin: 'spoon'
+
+spoon {
+    outputDirectory = "target/spoon-output"
+    apkDirectory = "target/apk"
+    teamCityLog = true
+}
