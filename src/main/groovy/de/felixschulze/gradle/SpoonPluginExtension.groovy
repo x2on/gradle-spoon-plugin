@@ -31,6 +31,7 @@ class SpoonPluginExtension {
     def Object outputDirectory = SpoonRunner.DEFAULT_OUTPUT_DIRECTORY
     def Object apkDirectory;
     def Boolean teamCityLog = false
+    def Boolean failOnFailure = true;
     def String apkFileNameRegex = ".*debug-unaligned.*.apk"
     def String testApkFileNameRegex = ".*test-unaligned.*.apk"
 

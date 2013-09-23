@@ -59,17 +59,27 @@ class SpoonTestTask extends DefaultTask {
                 .useAllAttachedDevices()
                 .build();
 
-        if (!spoonRunner.run()) {
-            System.exit(1);
+
+        if (!spoonRunner.run() && project.spoon.failOnFailure) {
+            if (project.spoon.teamCityLog) {
+                logJUnitXmlToTeamCity()
+            }
+            System.exit(1)
+        }
+        else {
+            if (project.spoon.teamCityLog) {
+                logJUnitXmlToTeamCity()
+            }
         }
 
-        if (project.spoon.teamCityLog) {
-            File junitDir = new File(project.spoon.outputDirectory, "junit-reports")
-            if (junitDir.exists()) {
-                junitDir.eachFile {
-                    if(it.name.endsWith('.xml')) {
-                        println "##teamcity[importData type='junit' path='${it.canonicalPath}']"
-                    }
+    }
+
+    def logJUnitXmlToTeamCity() {
+        File junitDir = new File(project.spoon.outputDirectory, "junit-reports")
+        if (junitDir.exists()) {
+            junitDir.eachFile {
+                if(it.name.endsWith('.xml')) {
+                    println "##teamcity[importData type='junit' path='${it.canonicalPath}']"
                 }
             }
         }
