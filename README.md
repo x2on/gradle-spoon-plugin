@@ -40,4 +40,4 @@ spoon {
 
 ## License
 
-gradle-hockeyapp-plugin is available under the MIT license. See the LICENSE file for more info.
+gradle-spoon-plugin is available under the MIT license. See the LICENSE file for more info.
