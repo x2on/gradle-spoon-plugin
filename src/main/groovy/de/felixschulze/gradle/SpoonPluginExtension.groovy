@@ -29,6 +29,7 @@ import org.gradle.api.Project
 class SpoonPluginExtension {
     def Boolean teamCityLog = false
     def Boolean failOnFailure = true;
+    def Boolean debug = false;
 
     private final Project project
 

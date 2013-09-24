@@ -56,6 +56,8 @@ class SpoonTestTask extends DefaultTask {
                 .setInstrumentationApk(instrumentationApk)
                 .setOutputDirectory(output)
                 .setAndroidSdk(cleanFile(System.getenv("ANDROID_HOME")))
+                .setDebug(project.spoon.debug)
+                .setClasspath(project.buildscript.configurations.classpath.asPath)
                 .useAllAttachedDevices()
                 .build();
 
