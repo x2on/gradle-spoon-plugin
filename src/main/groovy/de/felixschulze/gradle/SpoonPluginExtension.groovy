@@ -27,9 +27,11 @@ package de.felixschulze.gradle
 import org.gradle.api.Project
 
 class SpoonPluginExtension {
+    
     def Boolean teamCityLog = false
-    def Boolean failOnFailure = true;
-    def Boolean debug = false;
+    def Boolean failOnFailure = true
+    def Boolean debug = false
+    def Boolean zipReport = false
 
     private final Project project
 

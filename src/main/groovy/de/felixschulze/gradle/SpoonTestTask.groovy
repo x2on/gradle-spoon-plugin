@@ -67,6 +67,13 @@ class SpoonTestTask extends DefaultTask {
             logJUnitXmlToTeamCity()
         }
 
+        if (project.spoon.zipReport) {
+            new AntBuilder().zip(
+                    destfile: new File(project.getBuildDir(),"spoon.zip").absolutePath,
+                    basedir: output.absolutePath
+            )
+        }
+
         if (!succeeded && project.spoon.failOnFailure) {
             System.exit(1)
         }
