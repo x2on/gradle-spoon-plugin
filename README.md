@@ -11,16 +11,11 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'de.felixschulze.gradle:gradle-spoon-plugin:0.9.1+'
+        classpath 'de.felixschulze.gradle:gradle-spoon-plugin:0.9.5+'
     }
 }
 
 apply plugin: 'spoon'
-
-spoon {
-    outputDirectory = "build/spoon-output"
-    apkDirectory = "build/apk"
-}
 ```
 
 ## License
