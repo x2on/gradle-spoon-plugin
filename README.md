@@ -16,11 +16,6 @@ buildscript {
 }
 
 apply plugin: 'spoon'
-
-spoon {
-    outputDirectory = "build/spoon-output"
-    apkDirectory = "build/apk"
-}
 ```
 
 ## License
