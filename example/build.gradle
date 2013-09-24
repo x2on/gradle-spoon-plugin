@@ -13,7 +13,6 @@ buildscript {
 apply plugin: 'spoon'
 
 spoon {
-    outputDirectory = "target/spoon-output"
-    apkDirectory = "target/apk"
+    failOnFailure = false
     teamCityLog = true
 }

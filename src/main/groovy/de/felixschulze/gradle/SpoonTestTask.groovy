@@ -26,80 +26,61 @@ package de.felixschulze.gradle
 
 import com.squareup.spoon.SpoonRunner
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
-
-import java.util.regex.Pattern
 
 class SpoonTestTask extends DefaultTask {
 
-    SpoonTestTask() {
-        super()
-        this.description = "Run instrumentation tests on all connected devices."
-    }
+    @InputFile
+    File instrumentationApk
+
+    @InputFile
+    File applicationApk
+
+    @OutputDirectory
+    File output
+
+    String title;
 
     @TaskAction
     def runInstrumentationTests() throws IOException {
 
-        def applicationApk = getFile(project.spoon.apkFileNameRegex)
-        def instrumentationApk = getFile(project.spoon.testApkFileNameRegex)
-
-        println "ApplicationApk: " + applicationApk
-        println "InstrumentationApk: " + instrumentationApk
-
         if (!applicationApk || !instrumentationApk) {
-            throw new IllegalArgumentException("APK not found.")
+            throw new IllegalArgumentException("apk files not found.")
         }
 
         SpoonRunner spoonRunner = new SpoonRunner.Builder() //
-                .setTitle("Spoon Execution from gradle-spoon-plugin")
+                .setTitle(title)
                 .setApplicationApk(applicationApk)
                 .setInstrumentationApk(instrumentationApk)
-                .setOutputDirectory(project.spoon.outputDirectory)
+                .setOutputDirectory(output)
                 .setAndroidSdk(cleanFile(System.getenv("ANDROID_HOME")))
                 .useAllAttachedDevices()
                 .build();
 
+        boolean succeeded = spoonRunner.run()
 
-        if (!spoonRunner.run() && project.spoon.failOnFailure) {
-            if (project.spoon.teamCityLog) {
-                logJUnitXmlToTeamCity()
-            }
+        if (project.spoon.teamCityLog) {
+            logJUnitXmlToTeamCity()
+        }
+
+        if (!succeeded && project.spoon.failOnFailure) {
             System.exit(1)
         }
-        else {
-            if (project.spoon.teamCityLog) {
-                logJUnitXmlToTeamCity()
-            }
-        }
-
     }
 
-    def logJUnitXmlToTeamCity() {
-        File junitDir = new File(project.spoon.outputDirectory, "junit-reports")
-        if (junitDir.exists()) {
-            junitDir.eachFile {
-                if(it.name.endsWith('.xml')) {
+    private def logJUnitXmlToTeamCity() {
+        File jUnitDir = new File(output, "junit-reports")
+        if (jUnitDir.exists()) {
+            jUnitDir.eachFile {
+                if (it.name.endsWith('.xml')) {
                     println "##teamcity[importData type='junit' path='${it.canonicalPath}']"
                 }
             }
+        } else {
+            println "##teamcity[buildStatus status='FAILURE' text='No test report found']"
         }
-    }
-
-    def getFile(String regex) {
-        def pattern = Pattern.compile(regex)
-
-        if (!project.spoon.apkDirectory.exists()) {
-            throw new IllegalStateException("OutputDirectory not found")
-        }
-
-        def fileList = project.spoon.apkDirectory.list(
-                [accept: { d, f -> f ==~ pattern }] as FilenameFilter
-        ).toList()
-
-        if (fileList == null || fileList.size() == 0) {
-            return null
-        }
-        return new File(project.spoon.apkDirectory, fileList[0])
     }
 
     private static File cleanFile(String path) {

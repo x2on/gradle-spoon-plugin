@@ -24,8 +24,13 @@
 
 package de.felixschulze.gradle
 
+import com.squareup.spoon.SpoonRunner
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import com.android.build.gradle.AppExtension
+import com.android.build.gradle.AppPlugin
+import com.android.build.gradle.api.TestVariant
+import org.gradle.api.plugins.JavaBasePlugin
 
 class SpoonPlugin implements Plugin<Project> {
 
@@ -40,9 +45,25 @@ class SpoonPlugin implements Plugin<Project> {
     }
 
     void applyTasks(final Project project) {
-        project.task('spoon', type: SpoonTestTask, group: 'Spoon')
-    }
+        if (!project.plugins.hasPlugin(AppPlugin)) {
+            throw new IllegalStateException("gradle-android-plugin not found")
+        } else {
+            AppExtension android = project.android
+            android.testVariants.all { TestVariant variant ->
 
+                SpoonTestTask task = project.tasks.create("spoon${variant.name}", SpoonTestTask)
+                task.group = JavaBasePlugin.VERIFICATION_GROUP
+                task.description = "Run instrumentation tests on all connected devices for '${variant.name}'"
+                task.title = "$variant.name (gradle-spoon-plugin)"
+                task.output = new File(project.buildDir, SpoonRunner.DEFAULT_OUTPUT_DIRECTORY + "/${variant.name}")
+                task.applicationApk = variant.testedVariant.outputFile
+                task.instrumentationApk = variant.outputFile
+                task.outputs.upToDateWhen { false }
+
+                task.dependsOn variant.assemble, variant.testedVariant.assemble
+            }
+        }
+    }
 
     void configureDependencies(final Project project) {
         project.repositories {

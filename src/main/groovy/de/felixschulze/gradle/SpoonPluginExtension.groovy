@@ -24,40 +24,15 @@
 
 package de.felixschulze.gradle
 
-import com.squareup.spoon.SpoonRunner
 import org.gradle.api.Project
 
 class SpoonPluginExtension {
-    def Object outputDirectory = SpoonRunner.DEFAULT_OUTPUT_DIRECTORY
-    def Object apkDirectory;
     def Boolean teamCityLog = false
     def Boolean failOnFailure = true;
-    def String apkFileNameRegex = ".*debug-unaligned.*.apk"
-    def String testApkFileNameRegex = ".*test-unaligned.*.apk"
 
     private final Project project
 
     public SpoonPluginExtension(Project project) {
         this.project = project
-        this.outputDirectory = {
-            return project.project.getBuildDir()
-        }
     }
-
-    File getOutputDirectory() {
-        return project.file(outputDirectory)
-    }
-
-    void setOutputDirectory(Object outputDirectory) {
-        this.outputDirectory = outputDirectory
-    }
-
-    File getApkDirectory() {
-        return project.file(apkDirectory)
-    }
-
-    void setApkDirectory(Object apkDirectory) {
-        this.apkDirectory = apkDirectory
-    }
-
 }
