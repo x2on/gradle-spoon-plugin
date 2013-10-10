@@ -20,12 +20,15 @@ ext.isSnapshot = version.endsWith("-SNAPSHOT")
 
 repositories {
     mavenCentral()
+	maven {
+        url "https://raw.github.com/Scout24-CoC-MPS/AS24-Android-Maven-Repo/master"
+    }
 }
 
 dependencies {
     groovy localGroovy()
     compile gradleApi()
-    compile 'com.squareup.spoon:spoon-runner:1.0.5+'
+    compile 'com.squareup.spoon:spoon-runner:1.0.6-as1'
     compile 'com.android.tools.build:gradle:0.5.+'
 }
 
