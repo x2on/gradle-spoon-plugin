@@ -32,6 +32,7 @@ class SpoonPluginExtension {
     def Boolean failOnFailure = true
     def Boolean debug = false
     def Boolean zipReport = false
+    def Collection<String> testSizes = new ArrayList<String>()
 
     private final Project project
 
