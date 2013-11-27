@@ -20,9 +20,6 @@ ext.isSnapshot = version.endsWith("-SNAPSHOT")
 
 repositories {
     mavenCentral()
-	maven {
-        url "https://raw.github.com/Scout24-CoC-MPS/AS24-Android-Maven-Repo/master"
-    }
 }
 
 dependencies {
