@@ -11,7 +11,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'de.felixschulze.gradle:gradle-spoon-plugin:0.9.6+'
+        classpath 'de.felixschulze.gradle:gradle-spoon-plugin:1.0.1+'
     }
 }
 
@@ -28,6 +28,8 @@ spoon {
     debug = true
     failOnFailure = false
     testSizes = ['small', 'medium']
+    adbTimeout = 10*60
+    failIfNoDeviceConnected = false
 }
 ```
 
@@ -35,6 +37,8 @@ spoon {
 * `debug`: Activate debug output for spoon
 * `failOnFailure`: Deactivate exit code on failure
 * `testSizes`: Only run test methods annotated by testSize (small, medium, large)
+* `adbTimeout`: ADB timeout in seconds
+* `failIfNoDeviceConnected`: Fail if no device is connected
 
 ## Changelog
 
