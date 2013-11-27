@@ -65,7 +65,7 @@ class SpoonTestTask extends DefaultTask {
                 .setTestSize(testSize)
                 .setClasspath(project.buildscript.configurations.classpath.asPath)
                 .setFailIfNoDeviceConnected(project.spoon.failIfNoDeviceConnected)
-                .setAdbTimeout(project.spoon.adbTimeout)
+                .setAdbTimeout(project.spoon.adbTimeout * 1000)
                 .useAllAttachedDevices()
                 .build();
 
