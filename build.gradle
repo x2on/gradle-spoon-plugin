@@ -28,8 +28,8 @@ repositories {
 dependencies {
     groovy localGroovy()
     compile gradleApi()
-    compile 'com.squareup.spoon:spoon-runner:1.0.6-as1'
-    compile 'com.android.tools.build:gradle:0.5.+'
+    compile 'com.squareup.spoon:spoon-runner:1.1.0+'
+    compile 'com.android.tools.build:gradle:0.6.+'
 }
 
 task sourceJar(type: Jar) {
