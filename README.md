@@ -27,12 +27,14 @@ spoon {
     teamCityLog = true
     debug = true
     failOnFailure = false
+    testSizes = ['small', 'medium']
 }
 ```
 
 * `teamCityLog`: Add features for [TeamCity](http://www.jetbrains.com/teamcity/)
 * `debug`: Activate debug output for spoon
 * `failOnFailure`: Deactivate exit code on failure
+* `testSizes`: Only run test methods annotated by testSize (small, medium, large)
 
 ## Changelog
 

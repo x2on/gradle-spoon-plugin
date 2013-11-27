@@ -24,8 +24,10 @@
 
 package de.felixschulze.gradle
 
+import com.android.ddmlib.testrunner.IRemoteAndroidTestRunner
 import com.squareup.spoon.SpoonRunner
 import org.gradle.api.DefaultTask
+import org.gradle.api.Nullable
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
@@ -43,6 +45,9 @@ class SpoonTestTask extends DefaultTask {
 
     String title;
 
+    @Nullable
+    IRemoteAndroidTestRunner.TestSize testSize;
+
     @TaskAction
     def runInstrumentationTests() throws IOException {
 
@@ -57,6 +62,7 @@ class SpoonTestTask extends DefaultTask {
                 .setOutputDirectory(output)
                 .setAndroidSdk(cleanFile(System.getenv("ANDROID_HOME")))
                 .setDebug(project.spoon.debug)
+                .setTestSize(testSize)
                 .setClasspath(project.buildscript.configurations.classpath.asPath)
                 .useAllAttachedDevices()
                 .build();
