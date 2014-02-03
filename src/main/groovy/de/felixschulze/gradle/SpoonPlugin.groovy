@@ -66,11 +66,11 @@ class SpoonPlugin implements Plugin<Project> {
 
         String sizeString = testSize ? testSize.name().toLowerCase() : "all"
 
-        SpoonTestTask task = project.tasks.create("spoon${testSize ? sizeString.capitalize() : ""}${variant.name}", SpoonTestTask)
+        SpoonTestTask task = project.tasks.create("spoon${testSize ? sizeString.capitalize() : ""}${variant.name.capitalize()}", SpoonTestTask)
         task.group = JavaBasePlugin.VERIFICATION_GROUP
-        task.description = "Run ${sizeString} instrumentation tests on all connected devices for '${variant.name}'"
+        task.description = "Run ${sizeString} instrumentation tests on all connected devices for '${variant.name.capitalize()}'"
         task.title = "$variant.name (gradle-spoon-plugin)"
-        task.output = new File(project.buildDir, SpoonRunner.DEFAULT_OUTPUT_DIRECTORY + "/${testSize ? sizeString : ""}${variant.name}")
+        task.output = new File(project.buildDir, SpoonRunner.DEFAULT_OUTPUT_DIRECTORY + "/${testSize ? sizeString : ""}${variant.name.capitalize()}")
         task.applicationApk = variant.testedVariant.outputFile
         task.instrumentationApk = variant.outputFile
         task.setTestSize(testSize)
