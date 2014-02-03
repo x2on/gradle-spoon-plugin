@@ -75,6 +75,7 @@ class SpoonPlugin implements Plugin<Project> {
         task.instrumentationApk = variant.outputFile
         task.setTestSize(testSize)
         task.outputs.upToDateWhen { false }
+        task.sdkDir = project.getPlugins().findPlugin(AppPlugin).getSdkDirectory()
 
         task.dependsOn variant.assemble, variant.testedVariant.assemble
     }

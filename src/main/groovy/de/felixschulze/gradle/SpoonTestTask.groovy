@@ -45,6 +45,8 @@ class SpoonTestTask extends DefaultTask {
 
     String title;
 
+    String sdkDir;
+
     @Nullable
     IRemoteAndroidTestRunner.TestSize testSize;
 
@@ -60,7 +62,7 @@ class SpoonTestTask extends DefaultTask {
                 .setApplicationApk(applicationApk)
                 .setInstrumentationApk(instrumentationApk)
                 .setOutputDirectory(output)
-                .setAndroidSdk(cleanFile(System.getenv("ANDROID_HOME")))
+                .setAndroidSdk(cleanFile(sdkDir))
                 .setDebug(project.spoon.debug)
                 .setTestSize(testSize)
                 .setClasspath(project.buildscript.configurations.classpath.asPath)
