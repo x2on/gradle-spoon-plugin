@@ -25,7 +25,7 @@ repositories {
 dependencies {
     groovy localGroovy()
     compile gradleApi()
-    compile 'com.squareup.spoon:spoon-runner:1.1.0+'
+    compile 'com.squareup.spoon:spoon-runner:1.1.1+'
     compile 'com.android.tools.build:gradle:0.8.+'
 }
 
