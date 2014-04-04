@@ -40,6 +40,14 @@ spoon {
 * `adbTimeout`: ADB timeout in seconds
 * `failIfNoDeviceConnected`: Fail if no device is connected
 
+## Running specific test classes or test methods
+
+````
+-Dtest-class=class=fully_qualified_test_class_package_name
+-Dmethod-name=testMethodName
+````
+
+
 ## Changelog
 
 [Releases](https://github.com/x2on/gradle-spoon-plugin/releases)
