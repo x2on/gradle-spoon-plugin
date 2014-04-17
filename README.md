@@ -1,4 +1,4 @@
-# gradle-spoon-plugin [![Build Status](https://travis-ci.org/x2on/gradle-spoon-plugin.png)](https://travis-ci.org/x2on/gradle-spoon-plugin)
+# gradle-spoon-plugin [![Build Status](https://travis-ci.org/x2on/gradle-spoon-plugin.png)](https://travis-ci.org/x2on/gradle-spoon-plugin) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.felixschulze.gradle/gradle-spoon-plugin/badge.svg)](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22de.felixschulze.gradle%22%20AND%20a%3A%22gradle-spoon-plugin%22)
 A Gradle plugin for running Android instrumentation tests with [Spoon](http://square.github.io/spoon/).
 
 ## Basic usage
@@ -11,7 +11,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'de.felixschulze.gradle:gradle-spoon-plugin:1.1.2+'
+        classpath 'de.felixschulze.gradle:gradle-spoon-plugin:1.2+'
     }
 }
 
@@ -46,7 +46,6 @@ spoon {
 -PspoonTestClass=class=fully_qualified_test_class_package_name
 -PspoonTestMethod=testMethodName
 ````
-
 
 ## Changelog
 
