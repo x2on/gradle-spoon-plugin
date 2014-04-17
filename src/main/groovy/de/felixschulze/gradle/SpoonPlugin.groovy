@@ -76,8 +76,9 @@ class SpoonPlugin implements Plugin<Project> {
         task.setTestSize(testSize)
         task.outputs.upToDateWhen { false }
         task.sdkDir = project.getPlugins().findPlugin(AppPlugin).getSdkDirectory()
-
         task.dependsOn variant.assemble, variant.testedVariant.assemble
+        task.testClassName = project.hasProperty('spoonTestClass') ? project.property('spoonTestClass') : ""
+        task.testMethodName = project.hasProperty('spoonTestMethod') ? project.property('spoonTestMethod') : ""
     }
 
     void configureDependencies(final Project project) {

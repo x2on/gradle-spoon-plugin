@@ -43,9 +43,13 @@ class SpoonTestTask extends DefaultTask {
     @OutputDirectory
     File output
 
-    String title;
+    String title
 
-    String sdkDir;
+    String sdkDir
+
+    String testClassName
+
+    String testMethodName
 
     @Nullable
     IRemoteAndroidTestRunner.TestSize testSize;
@@ -68,6 +72,8 @@ class SpoonTestTask extends DefaultTask {
                 .setClasspath(project.buildscript.configurations.classpath.asPath)
                 .setFailIfNoDeviceConnected(project.spoon.failIfNoDeviceConnected)
                 .setAdbTimeout(project.spoon.adbTimeout * 1000)
+                .setClassName(testClassName)
+                .setMethodName(testMethodName)
                 .useAllAttachedDevices()
                 .build();
 
