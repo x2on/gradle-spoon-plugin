@@ -43,7 +43,7 @@ spoon {
 ## Running specific test classes or test methods
 
 ````
--PspoonTestClass=class=fully_qualified_test_class_package_name
+-PspoonTestClass=fully_qualified_test_class_package_name
 -PspoonTestMethod=testMethodName
 ````
 
