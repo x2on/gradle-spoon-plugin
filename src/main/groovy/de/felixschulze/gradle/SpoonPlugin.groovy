@@ -75,7 +75,7 @@ class SpoonPlugin implements Plugin<Project> {
         task.instrumentationApk = variant.outputFile
         task.setTestSize(testSize)
         task.outputs.upToDateWhen { false }
-        task.sdkDir = project.getPlugins().findPlugin(AppPlugin).getSdkDirectory()
+        task.sdkDir = sdkDirFromProject(project)
         task.dependsOn variant.assemble, variant.testedVariant.assemble
         task.testClassName = project.hasProperty('spoonTestClass') ? project.property('spoonTestClass') : ""
         task.testMethodName = project.hasProperty('spoonTestMethod') ? project.property('spoonTestMethod') : ""
@@ -87,4 +87,12 @@ class SpoonPlugin implements Plugin<Project> {
         }
     }
 
+    static File sdkDirFromProject(final Project project) {
+        AppPlugin appPlugin = project.getPlugins().findPlugin(AppPlugin)
+        if (appPlugin.metaClass.respondsTo(project, "getSdkDirectory")) {
+            // gradle-android-plugin 0.9.x
+            return appPlugin.getSdkDirectory()
+        }
+        return appPlugin.getSdkFolder()
+    }
 }
