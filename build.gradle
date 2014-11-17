@@ -23,10 +23,10 @@ repositories {
 }
 
 dependencies {
-    groovy localGroovy()
+    compile localGroovy()
     compile gradleApi()
     compile 'com.squareup.spoon:spoon-runner:1.1.1+'
-    compile 'com.android.tools.build:gradle:0.9.+'
+    compile 'com.android.tools.build:gradle:0.13.+'
 }
 
 task sourceJar(type: Jar) {
@@ -67,7 +67,7 @@ install.repositories.mavenInstaller {
 uploadArchives {
     repositories.mavenDeployer {
         if (signing.signatory) {
-            beforeDeployment { signPom(it) }
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
         }
         name = 'mavenCentralReleaseDeployer'
         repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {

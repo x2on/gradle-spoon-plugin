@@ -71,11 +71,11 @@ class SpoonPlugin implements Plugin<Project> {
         task.description = "Run ${sizeString} instrumentation tests on all connected devices for '${variant.name.capitalize()}'"
         task.title = "$variant.name (gradle-spoon-plugin)"
         task.output = new File(project.buildDir, SpoonRunner.DEFAULT_OUTPUT_DIRECTORY + "/${testSize ? sizeString : ""}${variant.name.capitalize()}")
-        task.applicationApk = variant.testedVariant.outputFile
-        task.instrumentationApk = variant.outputFile
+        task.applicationApk = variant.testedVariant.outputs[0].outputFile
+        task.instrumentationApk = variant.outputs[0].outputFile
         task.setTestSize(testSize)
         task.outputs.upToDateWhen { false }
-        task.sdkDir = sdkDirFromProject(project)
+        task.sdkDir = project.android.getSdkDirectory()
         task.dependsOn variant.assemble, variant.testedVariant.assemble
         task.testClassName = project.hasProperty('spoonTestClass') ? project.property('spoonTestClass') : ""
         task.testMethodName = project.hasProperty('spoonTestMethod') ? project.property('spoonTestMethod') : ""
@@ -87,12 +87,4 @@ class SpoonPlugin implements Plugin<Project> {
         }
     }
 
-    static File sdkDirFromProject(final Project project) {
-        AppPlugin appPlugin = project.getPlugins().findPlugin(AppPlugin)
-        if (appPlugin.metaClass.respondsTo(project, "getSdkDirectory")) {
-            // gradle-android-plugin 0.9.x
-            return appPlugin.getSdkDirectory()
-        }
-        return appPlugin.getSdkFolder()
-    }
 }
