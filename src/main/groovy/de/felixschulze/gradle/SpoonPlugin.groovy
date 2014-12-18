@@ -36,18 +36,17 @@ import org.gradle.api.plugins.JavaBasePlugin
 class SpoonPlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        configureDependencies(project)
         applyExtensions(project)
     }
 
-    void applyExtensions(final Project project) {
+    static void applyExtensions(final Project project) {
         project.extensions.create('spoon', SpoonPluginExtension, project)
         project.afterEvaluate {
             applyTasks(project)
         }
     }
 
-    void applyTasks(final Project project) {
+    static void applyTasks(final Project project) {
         if (!project.plugins.hasPlugin(AppPlugin)) {
             throw new IllegalStateException("gradle-android-plugin not found")
         } else {
@@ -61,7 +60,7 @@ class SpoonPlugin implements Plugin<Project> {
         }
     }
 
-    void createTask(final Project project, final TestVariant variant,
+    static void createTask(final Project project, final TestVariant variant,
                     final IRemoteAndroidTestRunner.TestSize testSize) {
 
         String sizeString = testSize ? testSize.name().toLowerCase() : "all"
@@ -79,12 +78,6 @@ class SpoonPlugin implements Plugin<Project> {
         task.dependsOn variant.assemble, variant.testedVariant.assemble
         task.testClassName = project.hasProperty('spoonTestClass') ? project.property('spoonTestClass') : ""
         task.testMethodName = project.hasProperty('spoonTestMethod') ? project.property('spoonTestMethod') : ""
-    }
-
-    void configureDependencies(final Project project) {
-        project.repositories {
-            mavenCentral()
-        }
     }
 
 }

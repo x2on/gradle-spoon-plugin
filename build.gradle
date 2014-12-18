@@ -25,8 +25,8 @@ repositories {
 dependencies {
     compile localGroovy()
     compile gradleApi()
-    compile 'com.squareup.spoon:spoon-runner:1.1.1+'
-    compile 'com.android.tools.build:gradle:0.13.+'
+    compile 'com.android.tools.build:gradle:1.0.0'
+    compile 'com.squareup.spoon:spoon-runner:1.1.1'
 }
 
 task sourceJar(type: Jar) {
@@ -60,7 +60,7 @@ gradle.taskGraph.whenReady { taskGraph ->
 install.repositories.mavenInstaller {
     pom.project(pomConfiguration)
     if (signing.signatory) {
-        beforeDeployment { signing.signPom(it) }
+        beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
     }
 }
 
