@@ -2,15 +2,14 @@
 
 buildscript {
 	repositories {
-   	 mavenLocal()
    	 mavenCentral()
 	}
 	dependencies {
-		classpath group: 'de.felixschulze.gradle', name: 'gradle-spoon-plugin', version: '1.1.+'
+        	classpath 'de.felixschulze.gradle:gradle-spoon-plugin:2.1'
 	}
 }
 
-apply plugin: 'spoon'
+apply plugin: 'de.felixschulze.gradle.spoon'
 
 spoon {
     failOnFailure = false
