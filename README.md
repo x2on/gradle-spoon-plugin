@@ -11,7 +11,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'de.felixschulze.gradle:gradle-spoon-plugin:2.0'
+        classpath 'de.felixschulze.gradle:gradle-spoon-plugin:2.1'
     }
 }
 
