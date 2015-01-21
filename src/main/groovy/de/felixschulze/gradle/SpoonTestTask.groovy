@@ -61,13 +61,15 @@ class SpoonTestTask extends DefaultTask {
             throw new IllegalArgumentException("apk files not found.")
         }
 
+        Boolean isDebugEnabled = logger.isDebugEnabled() || project.spoon.debug;
+
         SpoonRunner spoonRunner = new SpoonRunner.Builder() //
                 .setTitle(title)
                 .setApplicationApk(applicationApk)
                 .setInstrumentationApk(instrumentationApk)
                 .setOutputDirectory(output)
                 .setAndroidSdk(cleanFile(sdkDir))
-                .setDebug(project.spoon.debug)
+                .setDebug(isDebugEnabled)
                 .setTestSize(testSize)
                 .setClasspath(project.buildscript.configurations.classpath.asPath)
                 .setFailIfNoDeviceConnected(project.spoon.failIfNoDeviceConnected)
