@@ -25,8 +25,9 @@ repositories {
 dependencies {
     compile localGroovy()
     compile gradleApi()
-    compile 'com.android.tools.build:gradle:1.0.0'
-    compile 'com.squareup.spoon:spoon-runner:1.1.1'
+    compile 'com.android.tools.build:gradle:1.0.1'
+    compile 'com.squareup.spoon:spoon-runner:1.1.2'
+    compile 'de.felixschulze.teamcity:teamcity-status-message-helper:1.0.2'
 }
 
 task sourceJar(type: Jar) {

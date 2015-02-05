@@ -25,12 +25,20 @@
 package de.felixschulze.gradle
 
 import com.android.ddmlib.testrunner.IRemoteAndroidTestRunner
+import com.squareup.spoon.DeviceResult
 import com.squareup.spoon.SpoonRunner
+import com.squareup.spoon.SpoonSummary
+import de.felixschulze.teamcity.TeamCityImportDataType
+import de.felixschulze.teamcity.TeamCityProgressType
+import de.felixschulze.teamcity.TeamCityStatusMessageHelper
+import de.felixschulze.teamcity.TeamCityStatusType
 import org.gradle.api.DefaultTask
 import org.gradle.api.Nullable
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+
+import static com.squareup.spoon.SpoonUtils.GSON as GSON
 
 class SpoonTestTask extends DefaultTask {
 
@@ -79,10 +87,21 @@ class SpoonTestTask extends DefaultTask {
                 .useAllAttachedDevices()
                 .build();
 
+        if (project.spoon.teamCityLog) {
+            println TeamCityStatusMessageHelper.buildProgressString(TeamCityProgressType.START, "Spoon-Tests running...")
+        }
+
         boolean succeeded = spoonRunner.run()
 
         if (project.spoon.teamCityLog) {
-            logJUnitXmlToTeamCity()
+            println TeamCityStatusMessageHelper.buildProgressString(TeamCityProgressType.FINISH, succeeded ? "Spoon-Tests finished." : "Spoon-Test failed.")
+        }
+
+        if (project.spoon.teamCityLog) {
+            boolean logSuccessful = logJUnitXmlToTeamCity()
+            if (succeeded && !logSuccessful) {
+                succeeded = false
+            }
         }
 
         if (project.spoon.zipReport) {
@@ -93,20 +112,40 @@ class SpoonTestTask extends DefaultTask {
         }
 
         if (!succeeded && project.spoon.failOnFailure) {
+            //Check if apk could install on all devices
+            output.eachFile {
+                if (it.name.endsWith('.json')) {
+                    if (it.exists()) {
+                        FileReader resultFile = new FileReader(it);
+                        SpoonSummary result = GSON.fromJson(resultFile, SpoonSummary.class);
+                        if (result) {
+                            Map<String, DeviceResult> deviceResultMap = result.results;
+                            for (DeviceResult deviceResult in deviceResultMap.values()) {
+                                if (deviceResult.installFailed && deviceResult.installMessage) {
+                                    if (project.spoon.teamCityLog) {
+                                        println TeamCityStatusMessageHelper.buildStatusString(TeamCityStatusType.ERROR, "Error: " + deviceResult.installMessage)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             System.exit(1)
         }
     }
 
-    private def logJUnitXmlToTeamCity() {
+    private boolean logJUnitXmlToTeamCity() {
         File jUnitDir = new File(output, "junit-reports")
         if (jUnitDir.exists()) {
             jUnitDir.eachFile {
                 if (it.name.endsWith('.xml')) {
-                    println "##teamcity[importData type='junit' path='${it.canonicalPath}']"
+                    println TeamCityStatusMessageHelper.importDataString(TeamCityImportDataType.JUNIT, it.canonicalPath);
                 }
             }
+            return true
         } else {
-            println "##teamcity[buildStatus status='FAILURE' text='No test report found']"
+            return false
         }
     }
 
