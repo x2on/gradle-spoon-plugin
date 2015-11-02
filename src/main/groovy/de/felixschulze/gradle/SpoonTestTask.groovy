@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2013 Felix Schulze
+ * Copyright (c) 2013-2015 Felix Schulze
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ import com.android.ddmlib.testrunner.IRemoteAndroidTestRunner
 import com.squareup.spoon.DeviceResult
 import com.squareup.spoon.SpoonRunner
 import com.squareup.spoon.SpoonSummary
+import com.squareup.spoon.SpoonUtils
 import de.felixschulze.teamcity.TeamCityImportDataType
 import de.felixschulze.teamcity.TeamCityProgressType
 import de.felixschulze.teamcity.TeamCityStatusMessageHelper
@@ -59,6 +60,8 @@ class SpoonTestTask extends DefaultTask {
 
     String testMethodName
 
+    Collection<String> excludedDevices
+
     @Nullable
     IRemoteAndroidTestRunner.TestSize testSize;
 
@@ -70,8 +73,11 @@ class SpoonTestTask extends DefaultTask {
         }
 
         Boolean isDebugEnabled = logger.isDebugEnabled() || project.spoon.debug;
+        Boolean isTeamCityLogEnabled = project.spoon.teamCityLog
 
-        SpoonRunner spoonRunner = new SpoonRunner.Builder() //
+        excludedDevices = project.spoon.excludedDevices
+
+        SpoonRunner.Builder spoonRunnerBuilder = new SpoonRunner.Builder()
                 .setTitle(title)
                 .setApplicationApk(applicationApk)
                 .setInstrumentationApk(instrumentationApk)
@@ -84,20 +90,36 @@ class SpoonTestTask extends DefaultTask {
                 .setAdbTimeout(project.spoon.adbTimeout * 1000)
                 .setClassName(testClassName)
                 .setMethodName(testMethodName)
-                .useAllAttachedDevices()
-                .build();
 
-        if (project.spoon.teamCityLog) {
+        if (excludedDevices.empty) {
+            spoonRunnerBuilder.useAllAttachedDevices()
+        }
+        else {
+            Set<String> devices = SpoonUtils.findAllDevices(SpoonUtils.initAdb(cleanFile(sdkDir)))
+            devices.each {
+                if (excludedDevices.contains(it)) {
+                    logger.info("Skip device: ${it}")
+                }
+                else {
+                    logger.info("Use device: ${it}")
+                    spoonRunnerBuilder.addDevice(it)
+                }
+            }
+        }
+
+        SpoonRunner spoonRunner = spoonRunnerBuilder.build()
+
+        if (isTeamCityLogEnabled) {
             println TeamCityStatusMessageHelper.buildProgressString(TeamCityProgressType.START, "Spoon-Tests running...")
         }
 
         boolean succeeded = spoonRunner.run()
 
-        if (project.spoon.teamCityLog) {
+        if (isTeamCityLogEnabled) {
             println TeamCityStatusMessageHelper.buildProgressString(TeamCityProgressType.FINISH, succeeded ? "Spoon-Tests finished." : "Spoon-Test failed.")
         }
 
-        if (project.spoon.teamCityLog) {
+        if (isTeamCityLogEnabled) {
             boolean logSuccessful = logJUnitXmlToTeamCity()
             if (succeeded && !logSuccessful) {
                 succeeded = false
@@ -122,7 +144,7 @@ class SpoonTestTask extends DefaultTask {
                             Map<String, DeviceResult> deviceResultMap = result.results;
                             for (DeviceResult deviceResult in deviceResultMap.values()) {
                                 if (deviceResult.installFailed && deviceResult.installMessage) {
-                                    if (project.spoon.teamCityLog) {
+                                    if (isTeamCityLogEnabled) {
                                         println TeamCityStatusMessageHelper.buildStatusString(TeamCityStatusType.ERROR, "Error: " + deviceResult.installMessage)
                                     }
                                 }

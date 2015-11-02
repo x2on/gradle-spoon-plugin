@@ -35,6 +35,7 @@ class SpoonPluginExtension {
     def Boolean failIfNoDeviceConnected = true
     def int adbTimeout = 10 * 60; //10 minutes
     def Collection<String> testSizes = new ArrayList<String>()
+    def Collection<String> excludedDevices = new ArrayList<String>()
 
     private final Project project
 
