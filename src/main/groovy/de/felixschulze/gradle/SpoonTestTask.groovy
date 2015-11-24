@@ -95,7 +95,7 @@ class SpoonTestTask extends DefaultTask {
             spoonRunnerBuilder.useAllAttachedDevices()
         }
         else {
-            Set<String> devices = SpoonUtils.findAllDevices(SpoonUtils.initAdb(cleanFile(sdkDir), spoonRunnerBuilder.adbTimeout))
+            Set<String> devices = SpoonUtils.findAllDevices(SpoonUtils.initAdb(cleanFile(sdkDir), project.spoon.adbTimeout * 1000))
             devices.each {
                 if (excludedDevices.contains(it)) {
                     logger.info("Skip device: ${it}")
