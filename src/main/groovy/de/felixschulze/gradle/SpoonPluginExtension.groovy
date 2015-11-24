@@ -36,6 +36,7 @@ class SpoonPluginExtension {
     def int adbTimeout = 10 * 60; //10 minutes
     def Collection<String> testSizes = new ArrayList<String>()
     def Collection<String> excludedDevices = new ArrayList<String>()
+    def Collection<String> instrumentationArgs = new ArrayList<String>()
 
     private final Project project
 

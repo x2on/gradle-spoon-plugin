@@ -41,6 +41,7 @@ spoon {
 * `adbTimeout`: ADB timeout in seconds
 * `failIfNoDeviceConnected`: Fail if no device is connected
 * `excludedDevices`: List of devices which should be excluded
+* `instrumentationArgs`: List of arguments to pass to the Instrumentation Runner
 
 ## Running specific test classes or test methods
 

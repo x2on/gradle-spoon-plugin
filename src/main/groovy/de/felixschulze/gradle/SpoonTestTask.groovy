@@ -107,6 +107,11 @@ class SpoonTestTask extends DefaultTask {
             }
         }
 
+        Collection<String> instrumentationArgs = project.spoon.instrumentationArgs
+        if (!instrumentationArgs.empty) {
+            spoonRunnerBuilder.setInstrumentationArgs(instrumentationArgs.toList())
+        }
+
         SpoonRunner spoonRunner = spoonRunnerBuilder.build()
 
         if (isTeamCityLogEnabled) {
