@@ -1,4 +1,5 @@
 language: groovy
+sudo: false
 install: ./gradlew assemble
 script: ./gradlew clean build
 branches:
