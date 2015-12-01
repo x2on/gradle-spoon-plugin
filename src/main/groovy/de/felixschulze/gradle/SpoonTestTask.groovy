@@ -164,10 +164,25 @@ class SpoonTestTask extends DefaultTask {
 
     private boolean logJUnitXmlToTeamCity() {
         File jUnitDir = new File(output, "junit-reports")
+        logger.debug("Looking for junit-reports in: "+jUnitDir.absolutePath)
         if (jUnitDir.exists()) {
             jUnitDir.eachFile {
                 if (it.name.endsWith('.xml')) {
                     println TeamCityStatusMessageHelper.importDataString(TeamCityImportDataType.JUNIT, it.canonicalPath);
+
+                    try {
+                        String fileContents = new File(it.canonicalPath).text
+                        def testsuite = new XmlParser().parseText(fileContents)
+                        if (testsuite.name() == "testsuite") {
+                            if (testsuite.@tests == "0") {
+                                logger.error("No tests executed")
+                                println TeamCityStatusMessageHelper.buildStatusString(TeamCityStatusType.ERROR, "No tests executed")
+                            }
+                        }
+                    } catch (all) {
+                        logger.error(all.message)
+                    }
+
                 }
             }
             return true
