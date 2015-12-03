@@ -11,7 +11,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'de.felixschulze.gradle:gradle-spoon-plugin:2.7'
+        classpath 'de.felixschulze.gradle:gradle-spoon-plugin:2.7.2'
     }
 }
 
@@ -31,6 +31,7 @@ spoon {
     adbTimeout = 10*60
     failIfNoDeviceConnected = false
     excludedDevices = ['f5adb1a1', 'a6asb224']
+    disableDexVerification = true
 }
 ```
 
@@ -42,6 +43,7 @@ spoon {
 * `failIfNoDeviceConnected`: Fail if no device is connected
 * `excludedDevices`: List of devices which should be excluded
 * `instrumentationArgs`: List of arguments to pass to the Instrumentation Runner
+* `disableDexVerification`: Set to true if you have problems on devices < 5.0 with multidex
 
 ## Running specific test classes or test methods
 
