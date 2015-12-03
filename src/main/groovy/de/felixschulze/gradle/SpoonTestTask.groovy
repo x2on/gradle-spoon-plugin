@@ -82,6 +82,7 @@ class SpoonTestTask extends DefaultTask {
         // Workaround for bug in gradle-android-plugin 1.5.0
         // @see https://code.google.com/p/android/issues/detail?id=194609
         // @see http://stackoverflow.com/a/33232335/268795
+        // @see https://code.google.com/p/android/issues/detail?id=195998
         if (project.spoon.disableDexVerification) {
             logger.info("Dex verification disabled on connected devices.")
             IDevice[] devices = SpoonUtils.initAdb(cleanFile(sdkDir), project.spoon.adbTimeout * 1000).getDevices()
