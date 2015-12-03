@@ -43,7 +43,7 @@ spoon {
 * `failIfNoDeviceConnected`: Fail if no device is connected
 * `excludedDevices`: List of devices which should be excluded
 * `instrumentationArgs`: List of arguments to pass to the Instrumentation Runner
-* `disableDexVerification`: Set to true if you have problems on devices < 5.0 with multidex
+* `disableDexVerification`: Set to true if you have problems on devices < 5.0 with multidex for disabling dex verification, to reenable it run `adb shell setprop dalvik.vm.dexopt-flags v=a,o=v`
 
 ## Running specific test classes or test methods
 

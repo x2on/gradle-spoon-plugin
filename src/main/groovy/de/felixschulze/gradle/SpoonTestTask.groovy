@@ -83,6 +83,8 @@ class SpoonTestTask extends DefaultTask {
         // @see https://code.google.com/p/android/issues/detail?id=194609
         // @see http://stackoverflow.com/a/33232335/268795
         // @see https://code.google.com/p/android/issues/detail?id=195998
+        // To reenable dex verification run the following command on the device:
+        // adb shell setprop dalvik.vm.dexopt-flags v=a,o=v
         if (project.spoon.disableDexVerification) {
             logger.info("Dex verification disabled on connected devices.")
             IDevice[] devices = SpoonUtils.initAdb(cleanFile(sdkDir), project.spoon.adbTimeout * 1000).getDevices()
