@@ -11,7 +11,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'de.felixschulze.gradle:gradle-spoon-plugin:2.7.2'
+        classpath 'de.felixschulze.gradle:gradle-spoon-plugin:2.7.3'
     }
 }
 
@@ -31,7 +31,6 @@ spoon {
     adbTimeout = 10*60
     failIfNoDeviceConnected = false
     excludedDevices = ['f5adb1a1', 'a6asb224']
-    disableDexVerification = true
 }
 ```
 
@@ -43,7 +42,6 @@ spoon {
 * `failIfNoDeviceConnected`: Fail if no device is connected
 * `excludedDevices`: List of devices which should be excluded
 * `instrumentationArgs`: List of arguments to pass to the Instrumentation Runner
-* `disableDexVerification`: Set to true if you have problems on devices < 5.0 with multidex for disabling dex verification, to reenable it run `adb shell setprop dalvik.vm.dexopt-flags v=a,o=v`
 
 ## Running specific test classes or test methods
 
@@ -51,6 +49,23 @@ spoon {
 -PspoonTestClass=fully_qualified_test_class_package_name
 -PspoonTestMethod=testMethodName
 ````
+
+## Workaround for gradle-android-plugin 1.5.0 Multidex bug
+
+```groovy
+// Workaround for Multidex bug in gradle-android-plugin
+// Replace Multidex dependency with some dummy dependency to avoid dex problems
+// @see https://code.google.com/p/android/issues/detail?id=194609
+project.getConfigurations().all { config ->
+    if (config.name.contains("AndroidTest")) {
+        config.resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            if (details.requested.name == "multidex") {
+                details.useTarget("de.felixschulze.teamcity:teamcity-status-message-helper:1.2")
+            }
+        }
+    }
+}
+```
 
 ## Changelog
 

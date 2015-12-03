@@ -31,7 +31,6 @@ class SpoonPluginExtension {
     def Boolean teamCityLog = false
     def Boolean failOnFailure = true
     def Boolean debug = false
-    def Boolean disableDexVerification = false
     def Boolean zipReport = false
     def Boolean failIfNoDeviceConnected = true
     def int adbTimeout = 10 * 60; //10 minutes

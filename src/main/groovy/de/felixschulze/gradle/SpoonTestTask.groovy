@@ -24,8 +24,6 @@
 
 package de.felixschulze.gradle
 
-import com.android.ddmlib.IDevice
-import com.android.ddmlib.IShellOutputReceiver
 import com.android.ddmlib.testrunner.IRemoteAndroidTestRunner
 import com.squareup.spoon.DeviceResult
 import com.squareup.spoon.SpoonRunner
@@ -78,46 +76,6 @@ class SpoonTestTask extends DefaultTask {
         Boolean isTeamCityLogEnabled = project.spoon.teamCityLog
 
         excludedDevices = project.spoon.excludedDevices
-
-        // Workaround for bug in gradle-android-plugin 1.5.0
-        // @see https://code.google.com/p/android/issues/detail?id=194609
-        // @see http://stackoverflow.com/a/33232335/268795
-        // @see https://code.google.com/p/android/issues/detail?id=195998
-        // To reenable dex verification run the following command on the device:
-        // adb shell setprop dalvik.vm.dexopt-flags v=a,o=v
-        if (project.spoon.disableDexVerification) {
-            logger.info("Dex verification disabled on connected devices.")
-            IDevice[] devices = SpoonUtils.initAdb(cleanFile(sdkDir), project.spoon.adbTimeout * 1000).getDevices()
-            IShellOutputReceiver outputReceiver = new IShellOutputReceiver() {
-                @Override
-                void addOutput(byte[] data, int offset, int length) {}
-
-                @Override
-                void flush() {}
-
-                @Override
-                boolean isCancelled() {
-                    return false
-                }
-            }
-            if (devices.size() > 0) {
-                logger.debug("Run adb shell command: setprop dalvik.vm.dexopt-flags v=n,o=v")
-                logger.debug("Run adb shell command: stop installd")
-                logger.debug("Run adb shell command: start installd")
-            }
-            devices.each {
-                if (!excludedDevices.contains(it.serialNumber)) {
-                    try {
-                        it.executeShellCommand("setprop dalvik.vm.dexopt-flags v=n,o=v", outputReceiver)
-                        it.executeShellCommand("stop installd", outputReceiver)
-                        it.executeShellCommand("start installd", outputReceiver)
-                    }
-                    catch (all) {
-                        logger.warn("Exception while executing adb shell command on '" + it.serialNumber + "': " + all.message)
-                    }
-                }
-            }
-        }
 
         SpoonRunner.Builder spoonRunnerBuilder = new SpoonRunner.Builder()
                 .setTitle(title)
