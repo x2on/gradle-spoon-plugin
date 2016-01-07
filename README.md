@@ -26,6 +26,7 @@ Add to your build.gradle
 spoon {
     teamCityLog = true
     debug = true
+    noAnimations = true
     failOnFailure = false
     testSizes = ['small', 'medium']
     adbTimeout = 10*60
@@ -36,6 +37,7 @@ spoon {
 
 * `teamCityLog`: Add features for [TeamCity](http://www.jetbrains.com/teamcity/)
 * `debug`: Activate debug output for spoon
+* `noAnimations`: Deactivate gif generation
 * `failOnFailure`: Deactivate exit code on failure
 * `testSizes`: Only run test methods annotated by testSize (small, medium, large)
 * `adbTimeout`: ADB timeout in seconds

@@ -84,6 +84,7 @@ class SpoonTestTask extends DefaultTask {
                 .setOutputDirectory(output)
                 .setAndroidSdk(cleanFile(sdkDir))
                 .setDebug(isDebugEnabled)
+                .setNoAnimations(project.spoon.noAnimations)
                 .setTestSize(testSize)
                 .setClasspath(project.buildscript.configurations.classpath.asPath)
                 .setFailIfNoDeviceConnected(project.spoon.failIfNoDeviceConnected)
