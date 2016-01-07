@@ -14,4 +14,5 @@ apply plugin: 'de.felixschulze.gradle.spoon'
 spoon {
     failOnFailure = false
     teamCityLog = true
+    noAnimations = true
 }
