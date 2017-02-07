@@ -62,6 +62,8 @@ class SpoonTestTask extends DefaultTask {
 
     Collection<String> excludedDevices
 
+
+
     @Nullable
     IRemoteAndroidTestRunner.TestSize testSize;
 
@@ -76,6 +78,12 @@ class SpoonTestTask extends DefaultTask {
         Boolean isTeamCityLogEnabled = project.spoon.teamCityLog
 
         excludedDevices = project.spoon.excludedDevices
+
+        singleDevice = project.spoon.singleDevice
+
+        if (singleDevice == null) {
+            singleDevice=""
+        }
 
         SpoonRunner.Builder spoonRunnerBuilder = new SpoonRunner.Builder()
                 .setTitle(title)
@@ -98,12 +106,16 @@ class SpoonTestTask extends DefaultTask {
         else {
             Set<String> devices = SpoonUtils.findAllDevices(SpoonUtils.initAdb(cleanFile(sdkDir), project.spoon.adbTimeout * 1000))
             devices.each {
-                if (excludedDevices.contains(it)) {
-                    logger.info("Skip device: ${it}")
-                }
-                else {
+                if (!singleDevice.empty && singleDevice.contains(it)) {
                     logger.info("Use device: ${it}")
                     spoonRunnerBuilder.addDevice(it)
+                } else {
+                    if (!excludedDevices.empty && excludedDevices.contains(it)) {
+                        logger.info("Skip device: ${it}")
+                    } else if (singleDevice.empty) {
+                        logger.info("Use device: ${it}")
+                        spoonRunnerBuilder.addDevice(it)
+                    }
                 }
             }
         }
