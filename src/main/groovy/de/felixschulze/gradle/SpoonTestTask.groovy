@@ -62,6 +62,7 @@ class SpoonTestTask extends DefaultTask {
 
     Collection<String> excludedDevices
 
+    String singleDevice
 
 
     @Nullable
