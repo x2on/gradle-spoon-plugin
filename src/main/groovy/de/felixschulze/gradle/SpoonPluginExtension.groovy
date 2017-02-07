@@ -38,6 +38,7 @@ class SpoonPluginExtension {
     def Collection<String> testSizes = new ArrayList<String>()
     def Collection<String> excludedDevices = new ArrayList<String>()
     def Collection<String> instrumentationArgs = new ArrayList<String>()
+    def String singleDevice = ""
 
     private final Project project
 
